@@ -2,11 +2,22 @@ import { useState } from "react"
 import './App.css';
 
 function App()  {
+  const [movieList, setMovieList] = useState([])
+  const handleAddMovie = (newMovie) => {
+    const movieListCopy = [...movieList ]
+    movieListCopy.push(newMovie)
+    setMovieList(movieListCopy)
+  }
+  console.log(movieList)
   return (
     <div className="App App-header">
-      <MovieForm />
-      
-      
+      <MovieForm handleAddMovie={handleAddMovie} />
+      <MoviesDisplay movieList={movieList} />
+
+
+
+
+
     </div>
   );
 }
@@ -16,6 +27,8 @@ function MovieForm(props) {
   const [actors, setActors] = useState("")
   const [plot, setPlot] = useState("")
   const [imdbRating, setImdbRating] = useState(0)
+
+
   console.log(title)
   return (
     <div className="App App-header">
@@ -23,8 +36,12 @@ function MovieForm(props) {
       <label>Title:</label>
       <input type="text" onChange={(event)=>{
 setTitle(event.target.value)
-}}/>
+
+}
+}
+/>
 <p>Current Title: {title}</p>
+
 
 <label>Director:</label>
       <input type="text" onChange={(event)=>{
@@ -53,8 +70,57 @@ setImdbRating(event.target.value)
 
 
 
+<button onClick={()=>{
 
-      
+  const newMovie ={
+    title,
+    director,
+    actors,
+    plot,
+    imdbRating
+
+  }
+
+  props.handleAddMovie(newMovie)
+
+
+
+
+}}>Add Movie</button>
+
+
+
+
+
+    </div>
+  );
+}
+
+
+function MoviesDisplay(props) {
+
+  return (
+    <div className="App App-header">
+      {props.movieList.map((movie, index)=>{
+
+      return (<MoviesItem movie={movie} key={index}/>
+      )
+      })}
+
+    </div>
+  );
+}
+
+function MoviesItem(props) {
+
+  return (
+    <div className="App App-header">
+      <h2>Title: {props.movie.title}</h2>
+      <p>Director: {props.movie.director}</p>
+      <p>Actors: {props.movie.actors}</p>
+      <p>Plot: {props.movie.plot}</p>
+      <p>IMDB Rating: {props.movie.imdbRating}</p>
+
     </div>
   );
 }
